@@ -31,7 +31,7 @@ struct Project {
                 .replacingOccurrences(of: FileManager.default.homeDirectoryForCurrentUser.path, with: "")
                 .removingPercentEncoding,
             arg: url.path,
-            icon: .init(type: .fileIcon, path: path),
+            icon: .init(type: .fileIcon, path: kind.iconURL.path.removingPercentEncoding!),
             valid: true,
             match: nil,
             autocomplete: url.path.removingPercentEncoding,
@@ -44,10 +44,10 @@ struct Project {
     }
 
     enum Kind {
-        case `default`
+        case `default`(icon: URL)
         case VSCode(workspace: URL)
-        case Xcode
-        case QTCreator
+        case Xcode(icon: URL)
+        case QTCreator(icon: URL)
 
         var appName: String {
             switch self {
@@ -57,20 +57,43 @@ struct Project {
             }
         }
 
+        var iconURL: URL {
+            switch self {
+            case .default(let icon):
+                return icon
+            case .VSCode(let workspace):
+                return workspace
+            case .Xcode(let icon):
+                return icon
+            case .QTCreator(let icon):
+                return icon
+            }
+        }
+
         static func infer(from url: URL) throws -> Kind {
             let contents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [], options: [])
 
-            if let workspace = contents.first(where: { $0.lastPathComponent.hasSuffix(".code-workspace") }) {
+            let findByExtension = { (ext: String) in contents.first { $0.lastPathComponent.hasSuffix(ext) } }
+            let findFile = { (name: String) in contents.first { $0.lastPathComponent == name } }
+
+            if let workspace = findByExtension(".code-workspace") {
                 return .VSCode(workspace: workspace)
             }
-            if contents.contains(where: { $0.lastPathComponent.hasSuffix(".xcodeproj") }) {
-                return .Xcode
+            if let workspace = findByExtension(".xcworkspace") {
+                return .Xcode(icon: workspace)
             }
-            if contents.contains(where: { $0.lastPathComponent.hasSuffix(".pro") }) {
-                return .QTCreator
+            if let project = findByExtension(".xcodeproj") {
+                return .Xcode(icon: project)
+            }
+            if let project = findByExtension(".pro") {
+                return .QTCreator(icon: project)
             }
 
-            return .default
+            if let package = findFile("package.json") {
+                return .default(icon: package)
+            }
+
+            return .default(icon: url)
         }
     }
 }
