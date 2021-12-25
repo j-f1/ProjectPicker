@@ -30,7 +30,7 @@ struct Project {
             subtitle: url.path
                 .replacingOccurrences(of: FileManager.default.homeDirectoryForCurrentUser.path, with: "")
                 .removingPercentEncoding,
-            arg: [],
+            arg: url.path,
             icon: .init(type: .fileIcon, path: path),
             valid: true,
             match: nil,

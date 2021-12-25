@@ -32,7 +32,7 @@ enum Alfred {
         let subtitle: String?
 
         /// The argument which is passed through the workflow to the connected output action.
-        let arg: [String]
+        let arg: String
 
         /// The icon displayed in the result row. Workflows are run from their workflow folder, so you can reference icons stored in your workflow relatively.
         let icon: Icon
