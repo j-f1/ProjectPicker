@@ -24,12 +24,15 @@ struct Project {
     }
 
     var alfredItem: Alfred.Item {
-        .init(
+        let friendlyPath = url.path
+            .replacingOccurrences(of: FileManager.default.homeDirectoryForCurrentUser.path, with: "", options: .anchored)
+            .removingPercentEncoding!
+            .dropFirst()
+            .replacingOccurrences(of: "Documents/", with: "", options: .anchored)
+        return .init(
             uid: url.absoluteString,
             title: url.lastPathComponent,
-            subtitle: url.path
-                .replacingOccurrences(of: FileManager.default.homeDirectoryForCurrentUser.path, with: "")
-                .removingPercentEncoding,
+            subtitle: "\(friendlyPath) • \(kind.appFriendlyName)",
             arg: url.path,
             icon: .init(type: .fileIcon, path: kind.iconURL.path.removingPercentEncoding!),
             valid: true,
@@ -57,6 +60,13 @@ struct Project {
             }
         }
 
+        var appFriendlyName: String {
+            switch self {
+            case .default, .VSCode: return "VS Code"
+            default: return appName
+            }
+        }
+
         var iconURL: URL {
             switch self {
             case .default(let icon):
@@ -78,6 +88,9 @@ struct Project {
 
             if let workspace = findByExtension(".code-workspace") {
                 return .VSCode(workspace: workspace)
+            }
+            if let package = findByExtension("Package.swift") {
+                return .Xcode(icon: package)
             }
             if let workspace = findByExtension(".xcworkspace") {
                 return .Xcode(icon: workspace)

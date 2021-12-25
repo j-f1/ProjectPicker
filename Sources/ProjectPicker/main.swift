@@ -12,13 +12,15 @@ defer { try? Config.shared.save() }
     }
 }
 
-let projects = try Config.shared.searchPaths.flatMap { (path) -> [ProjectWithDate] in
-    let url = URL(fileURLWithPath: path, relativeTo: FileManager.default.homeDirectoryForCurrentUser)
+let searchURLs = Config.shared.searchPaths.map { URL(fileURLWithPath: $0, relativeTo: FileManager.default.homeDirectoryForCurrentUser) }
+let searchURLPaths = searchURLs.map(\.path)
+
+let projects = try searchURLs.flatMap { (url) -> [ProjectWithDate] in
     let urls = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey, .isPackageKey, .contentModificationDateKey], options: [])
     return try urls
         .filter { url in
             let values = try url.resourceValues(forKeys: [.isDirectoryKey, .isPackageKey])
-            return values.isDirectory == true && values.isPackage != true
+            return values.isDirectory == true && values.isPackage != true && !searchURLPaths.contains(url.path)
         }
         .map { url in
             return try ProjectWithDate(
