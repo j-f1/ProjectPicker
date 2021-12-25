@@ -34,11 +34,11 @@ struct Project {
             icon: .init(type: .fileIcon, path: kind.iconURL.path.removingPercentEncoding!),
             valid: true,
             match: nil,
-            autocomplete: url.path.removingPercentEncoding,
+            autocomplete: nil,
             type: .file(skipCheck: true),
             variables: [
                 "appName": kind.appName,
-                "pathToOpen": path
+                "pathToOpen": path.removingPercentEncoding!
             ]
         )
     }
