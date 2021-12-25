@@ -11,4 +11,4 @@ let projects = try Config.shared.searchPaths.flatMap { (path) -> [Project] in
         .map(Project.init)
 }
 
-print(projects)
+try Alfred.Result(items: projects.map(\.alfredItem)).output(debug: false)
