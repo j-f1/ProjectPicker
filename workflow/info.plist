@@ -72,7 +72,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>script</key>
-				<string>open -a "$appName" "$pathToOpen"</string>
+				<string>open -a &quot;$appName&quot; &quot;$pathToOpen&quot;</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -174,7 +174,7 @@
 				<key>script</key>
 				<string>cd $1
 
-open "$(git remote get-url upstream || git remote get-url "$(git remote | head -n 1)")"</string>
+open &quot;$(git remote get-url upstream || git remote get-url &quot;$(git remote | head -n 1)&quot;)&quot;</string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
 				<key>scriptfile</key>
@@ -193,7 +193,7 @@ open "$(git remote get-url upstream || git remote get-url "$(git remote | head -
 	<key>readme</key>
 	<string>See GitHub repository for directions (https://github.com/j-f1/ProjectPicker)
 
-© 2021 Jed Fox. Licensed under the MIT License.</string>
+© 2021–2022 Jed Fox. Licensed under the MIT License.</string>
 	<key>uidata</key>
 	<dict>
 		<key>1774038C-D19A-4923-8B6E-81DD5041B8D9</key>
@@ -235,7 +235,7 @@ open "$(git remote get-url upstream || git remote get-url "$(git remote | head -
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>1.0.0</string>
+	<string>1.1.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/j-f1/ProjectPicker</string>
 </dict>
