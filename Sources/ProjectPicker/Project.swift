@@ -17,67 +17,65 @@ struct Project {
     }
 
     var path: String {
-        if case .VSCode(let workspace) = kind {
-            return workspace.path
+        if kind.shouldOpenIcon {
+            return kind.icon.path
         }
         return url.path
     }
 
-    var alfredItem: Alfred.Item {
-        let friendlyPath = url.path
+    var friendlyPath: String {
+        url.path
             .replacingOccurrences(of: FileManager.default.homeDirectoryForCurrentUser.path, with: "", options: .anchored)
             .removingPercentEncoding!
             .dropFirst()
             .replacingOccurrences(of: "Documents/", with: "", options: .anchored)
+    }
+
+    var alfredItem: Alfred.Item {
         return .init(
             uid: url.absoluteString,
             title: url.lastPathComponent,
             subtitle: "\(friendlyPath) • \(kind.appFriendlyName)",
             arg: url.path,
-            icon: .init(type: .fileIcon, path: kind.iconURL.path.removingPercentEncoding!),
+            icon: .init(type: .fileIcon, path: kind.icon.path.removingPercentEncoding!),
             valid: true,
             match: nil,
             autocomplete: nil,
             type: .file(skipCheck: true),
             variables: [
-                "appName": kind.appName,
+                "appName": Config.shared.apps[keyPath: kind.appName],
                 "pathToOpen": path.removingPercentEncoding!
             ]
         )
     }
 
-    enum Kind {
-        case `default`(icon: URL)
-        case VSCode(workspace: URL)
-        case Xcode(icon: URL)
-        case QtCreator(icon: URL)
+    struct Kind {
+        private static let vsCodeName = "Visual Studio Code - Insiders"
 
-        var appName: String {
-            switch self {
-            case .default, .VSCode: return "Visual Studio Code - Insiders"
-            case .Xcode: return "Xcode"
-            case .QtCreator: return "Qt Creator"
-            }
+        let icon: URL
+        let appName: KeyPath<Config.AppNames, String>
+        let description: String
+        let shouldOpenIcon: Bool
+
+        private static func `default`(icon: URL, description: String) -> Kind {
+            Kind(icon: icon, appName: \.default, description: description, shouldOpenIcon: false)
         }
+        private static func VSCode(workspace: URL) -> Kind {
+            Kind(icon: workspace, appName: \.vscode, description: "VS Code", shouldOpenIcon: true)
+        }
+        private static func Xcode(icon: URL, description: String) -> Kind {
+            Kind(icon: icon, appName: \.xcode, description: description, shouldOpenIcon: false)
+        }
+        private static func QtCreator(icon: URL) -> Kind {
+            Kind(icon: icon, appName: \.qtCreator, description: "Qt Creator", shouldOpenIcon: false)
+        }
+
 
         var appFriendlyName: String {
-            switch self {
-            case .default, .VSCode: return "VS Code"
-            default: return appName
+            if Config.shared.apps[keyPath: appName] == Config.shared.apps.vscode {
+                return "VS Code"
             }
-        }
-
-        var iconURL: URL {
-            switch self {
-            case .default(let icon):
-                return icon
-            case .VSCode(let workspace):
-                return workspace
-            case .Xcode(let icon):
-                return icon
-            case .QtCreator(let icon):
-                return icon
-            }
+            return Config.shared.apps[keyPath: appName]
         }
 
         static func infer(from url: URL) throws -> Kind {
@@ -90,23 +88,58 @@ struct Project {
                 return .VSCode(workspace: workspace)
             }
             if let package = findByExtension("Package.swift") {
-                return .Xcode(icon: package)
+                return .Xcode(icon: package, description: "Swift")
             }
             if let workspace = findByExtension(".xcworkspace") {
-                return .Xcode(icon: workspace)
+                return .Xcode(icon: workspace, description: "Xcode (workspace)")
             }
             if let project = findByExtension(".xcodeproj") {
-                return .Xcode(icon: project)
+                return .Xcode(icon: project, description: "Xcode")
             }
             if let project = findByExtension(".pro") {
                 return .QtCreator(icon: project)
             }
 
-            if let package = findFile("package.json") {
-                return .default(icon: package)
+            if let racket = findByExtension(".rkt") {
+                return .default(icon: racket, description: "Racket")
             }
 
-            return .default(icon: url)
+            if let package = findFile("package.json") {
+                return .default(icon: package, description: "Node.js")
+            }
+            if let requirements = findFile("requirements.txt") {
+                return .default(icon: requirements, description: "Python")
+            }
+            if let dune = findFile("dune-project") {
+                return .default(icon: dune, description: "OCaml")
+            }
+            if let make = findFile("Makefile") {
+                return .default(icon: make, description: "C")
+            }
+            if let make = findFile("Makefile.am") {
+                return .default(icon: make, description: "C")
+            }
+            if let cMake = findFile("CMakeLists.txt") {
+                return .default(icon: cMake, description: "C")
+            }
+            if let porn = findFile("pom.xml") {
+                return .default(icon: porn, description: "Java")
+            }
+            if let gems = findFile("Gemfile") {
+                return .default(icon: gems, description: "Ruby")
+            }
+            if let config = findFile("_config.yml") {
+                return .default(icon: config, description: "Jekyll")
+            }
+            if let goMod = findFile("go.mod") {
+                return .default(icon: goMod, description: "Go")
+            }
+
+            if findFile("__pycache__") != nil {
+                return .default(icon: url, description: "Python")
+            }
+
+            return .default(icon: url, description: "Unknown")
         }
     }
 }
