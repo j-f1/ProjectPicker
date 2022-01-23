@@ -50,13 +50,13 @@ struct Project {
         case `default`(icon: URL)
         case VSCode(workspace: URL)
         case Xcode(icon: URL)
-        case QTCreator(icon: URL)
+        case QtCreator(icon: URL)
 
         var appName: String {
             switch self {
             case .default, .VSCode: return "Visual Studio Code - Insiders"
             case .Xcode: return "Xcode"
-            case .QTCreator: return "Qt Creator"
+            case .QtCreator: return "Qt Creator"
             }
         }
 
@@ -75,7 +75,7 @@ struct Project {
                 return workspace
             case .Xcode(let icon):
                 return icon
-            case .QTCreator(let icon):
+            case .QtCreator(let icon):
                 return icon
             }
         }
@@ -99,7 +99,7 @@ struct Project {
                 return .Xcode(icon: project)
             }
             if let project = findByExtension(".pro") {
-                return .QTCreator(icon: project)
+                return .QtCreator(icon: project)
             }
 
             if let package = findFile("package.json") {
