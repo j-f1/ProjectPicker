@@ -32,10 +32,16 @@ struct Project {
     }
 
     var alfredItem: Alfred.Item {
+        let app: String
+        if kind.description == kind.appFriendlyName {
+            app = kind.appFriendlyName
+        } else {
+            app = "\(kind.description) (\(kind.appFriendlyName))"
+        }
         return .init(
             uid: url.absoluteString,
             title: url.lastPathComponent,
-            subtitle: "\(friendlyPath) • \(kind.appFriendlyName)",
+            subtitle: "\(friendlyPath) • \(app)",
             arg: url.path,
             icon: .init(type: .fileIcon, path: kind.icon.path.removingPercentEncoding!),
             valid: true,
