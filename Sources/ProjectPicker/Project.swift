@@ -90,6 +90,7 @@ struct Project {
             let findByExtension = { (ext: String) in contents.first { $0.lastPathComponent.hasSuffix(ext) } }
             let findFile = { (name: String) in contents.first { $0.lastPathComponent == name } }
 
+            // MARK: IDE detection
             if let workspace = findByExtension(".code-workspace") {
                 return .VSCode(workspace: workspace)
             }
@@ -106,6 +107,7 @@ struct Project {
                 return .QtCreator(icon: project)
             }
 
+            // MARK: Icon inference for default editor
             if let racket = findByExtension(".rkt") {
                 return .default(icon: racket, description: "Racket")
             }
@@ -140,7 +142,6 @@ struct Project {
             if let goMod = findFile("go.mod") {
                 return .default(icon: goMod, description: "Go")
             }
-
             if findFile("__pycache__") != nil {
                 return .default(icon: url, description: "Python")
             }
