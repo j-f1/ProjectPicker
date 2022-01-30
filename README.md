@@ -27,10 +27,10 @@ For more details on how the editor lookup works, check out the `Project.Kind.inf
 
 After highlighting a project in Alfred, you can do the following things:
 - Press <kbd>return</kbd> to open the project in the appropriate editor
-- Press <kbd>⌘</kbd>+<kbd>return</kbd> to open the project folder in the Finder
-- Press <kbd>⌥</kbd>+<kbd>return</kbd> to open the project folder in Terminal
-- Press <kbd>🌐︎</kbd>+<kbd>return</kbd> to open the project in GitHub Desktop
-- Press <kbd>⌃</kbd> to perform actions on the project folder using Alfred
+- Press ⌘+<kbd>return</kbd> to open the project folder in the Finder
+- Press ⌥+<kbd>return</kbd> to open the project folder in Terminal
+- Press 🌐︎+<kbd>return</kbd> to open the project in GitHub Desktop
+- Press ⌃ to perform actions on the project folder using Alfred
 
 ## Building
 
