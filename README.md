@@ -1,4 +1,7 @@
-# <img src="App Icon.png" width=30 height=30 alt="" align=center> ProjectPicker
+<h1 align=center>
+  <img src="App Icon.png" width=60 height=60 alt="">
+  <br>ProjectPicker
+</h1>
 
 An Alfred workflow for opening your projects.
 
