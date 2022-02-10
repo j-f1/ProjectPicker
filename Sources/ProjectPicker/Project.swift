@@ -38,14 +38,15 @@ struct Project {
         } else {
             app = "\(kind.description) (\(kind.appFriendlyName))"
         }
+        let name = url.lastPathComponent
         return .init(
             uid: url.absoluteString,
-            title: url.lastPathComponent,
+            title: name,
             subtitle: "\(friendlyPath) • \(app)",
             arg: url.path,
             icon: .init(type: .fileIcon, path: kind.icon.path.removingPercentEncoding!),
             valid: true,
-            match: nil,
+            match: name.contains(" ") ? name : "\(name) | \(name.words.joined(separator: " "))",
             autocomplete: nil,
             type: .file(skipCheck: true),
             variables: [
@@ -148,5 +149,27 @@ struct Project {
 
             return .default(icon: url, description: "Unknown")
         }
+    }
+}
+
+extension String {
+    // Adapted from https://github.com/Cosmo/StringCase/blob/028a12b8acd826c71521755ebb5fbc2b19d6daf3/Sources/StringCase/StringCase.swift#L62-L78
+    fileprivate var words: [String] {
+        var lastCharacter: Character = "1"
+        var results: [String] = []
+
+        for character in Array<Character>(self) {
+            if character == "-" {
+            } else if results.isEmpty || lastCharacter == "-" {
+                results.append(String(character))
+            } else if (lastCharacter.isLetter && !character.isLowercase && lastCharacter.isLowercase) || (character.isNumber && !lastCharacter.isNumber) {
+                results.append(String(character))
+            } else {
+                results[results.count - 1] = results[results.count - 1] + String(character)
+            }
+            lastCharacter = character
+        }
+
+        return results.map { $0.lowercased() }
     }
 }
