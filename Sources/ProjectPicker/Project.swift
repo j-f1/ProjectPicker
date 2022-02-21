@@ -39,6 +39,10 @@ struct Project {
             app = "\(kind.description) (\(kind.appFriendlyName))"
         }
         let name = url.lastPathComponent
+
+        let acronym = name.words.reduce(into: "") { partialResult, word in
+            word.first.map { partialResult.append($0) }
+        }
         return .init(
             uid: url.absoluteString,
             title: name,
@@ -46,7 +50,7 @@ struct Project {
             arg: url.path,
             icon: .init(type: .fileIcon, path: kind.icon.path.removingPercentEncoding!),
             valid: true,
-            match: name.contains(" ") ? name : "\(name) | \(name.words.joined(separator: " "))",
+            match: name.contains(" ") ? name : name + (name.words.count > 1 ? " | \(name.words.joined(separator: " ")) | \(acronym)" : ""),
             autocomplete: nil,
             type: .file(skipCheck: true),
             variables: [

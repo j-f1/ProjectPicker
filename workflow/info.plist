@@ -235,7 +235,7 @@ open &quot;$(git remote get-url upstream || git remote get-url &quot;$(git remot
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>1.2.0</string>
+	<string>1.2.1</string>
 	<key>webaddress</key>
 	<string>https://github.com/j-f1/ProjectPicker</string>
 </dict>
