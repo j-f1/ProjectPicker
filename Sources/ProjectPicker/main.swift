@@ -22,7 +22,7 @@ let projects = try searchURLs.flatMap { (url) -> [ProjectWithDate] in
     return try urls
         .filter { url in
             let values = try url.resourceValues(forKeys: [.isDirectoryKey, .isPackageKey])
-            return values.isDirectory == true && values.isPackage != true && !searchURLPaths.contains(url.path) && !url.lastPathComponent.starts(with: ".")  && !url.lastPathComponent.contains("venv")
+            return values.isDirectory == true && values.isPackage != true && !searchURLPaths.contains(url.path) && !url.lastPathComponent.starts(with: ".")  && !url.lastPathComponent.contains("venv") && url.lastPathComponent != "SharedXcodeSettings"
         }
         .map { url in
             return try ProjectWithDate(
