@@ -5,6 +5,14 @@ let start = Date()
 
 defer { try? Config.shared.save() }
 
+extension Sequence {
+    func sorted<T: Comparable>(by keyPath: KeyPath<Element, T>, reversed: Bool = false) -> [Element] {
+        sorted(by: reversed
+               ? { $0[keyPath: keyPath] > $1[keyPath: keyPath] }
+               : { $0[keyPath: keyPath] < $1[keyPath: keyPath] })
+    }
+}
+
 @objcMembers class ProjectWithDate: NSObject {
     let project: Project
     let date: Date
@@ -30,7 +38,7 @@ let projects = try searchURLs.flatMap { (url) -> [ProjectWithDate] in
                 date: try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
             )
         }
-}.sorted(using: SortDescriptor(\ProjectWithDate.date, order: .reverse))
+}.sorted(by: \.date)
 
 let items = projects.map(\.project.alfredItem)
 
