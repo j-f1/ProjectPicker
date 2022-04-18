@@ -51,12 +51,34 @@ if ProcessInfo.processInfo.arguments.contains("--info") {
         partialResult[project.project.kind.description, default: Set()].insert(project)
     }
     let maxWidth = (byType.map(\.key.count).max() ?? 0) + 1
-    for (kind, projects) in byType.sorted(by: { $0.value.count > $1.value.count }) {
-        print("\((kind + ":").padding(toLength: maxWidth, withPad: " ", startingAt: 0)) \(projects.count)")
+
+    var firstTable = [
+        "\(String(repeating: " ", count: maxWidth - "Project Kind".count))Project Kind  Count ↓",
+        "",
+//        "\(String(repeating: " ", count: maxWidth))  -----",
+    ]
+    for (kind, projects) in byType.sorted(by: \.value.count, reversed: true) {
+        if kind == "Unknown" { continue }
+        firstTable.append("\(String(repeating: " ", count: maxWidth - kind.count))\(kind)  \(projects.count)")
+    }
+
+    var secondTable = [
+        "\(String(repeating: " ", count: maxWidth - "↓ Project Kind".count))↓ Project Kind  Count",
+        "",
+//        "\(String(repeating: " ", count: maxWidth - "Project Kind".count))------------",
+    ]
+    for (kind, projects) in byType.sorted(by: \.key) {
+        if kind == "Unknown" { continue }
+        secondTable.append("\(String(repeating: " ", count: maxWidth - kind.count))\(kind)  \(projects.count)")
+    }
+
+    print()
+    for (lhs, rhs) in zip(secondTable, firstTable) {
+        print("\(lhs)\(String(repeating: " ", count: firstTable.map(\.count).max()! - lhs.count))  |  \(rhs)")
     }
 
     if ProcessInfo.processInfo.arguments.contains("--list-unknown") {
-        print()
+        print("\n")
         print("--- Unknown Projects (\(byType["Unknown"]!.count)): ---")
         print(byType["Unknown"]!.map(\.project.friendlyPath).sorted().joined(separator: "\n"))
     }
