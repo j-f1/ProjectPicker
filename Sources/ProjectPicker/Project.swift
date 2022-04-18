@@ -151,6 +151,11 @@ struct Project {
                 return .default(icon: url, description: "Python")
             }
 
+            // MARK: recurse into promising directories
+            if let child = ["code", "client", "src", "app", "lib"].compactMap(findFile).first {
+                return try infer(from: child)
+            }
+
             return .default(icon: url, description: "Unknown")
         }
     }
