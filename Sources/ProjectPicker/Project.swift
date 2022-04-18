@@ -93,7 +93,7 @@ struct Project {
             let contents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [], options: [])
 
             let findByExtension = { (ext: String) in contents.first { $0.lastPathComponent.hasSuffix(ext) } }
-            let findFile = { (name: String) in contents.first { $0.lastPathComponent == name } }
+            let findFile = { (names: String...) in contents.first { names.contains($0.lastPathComponent) } }
 
             // MARK: IDE detection
             if let workspace = findByExtension(".code-workspace") {
@@ -126,14 +126,8 @@ struct Project {
             if let dune = findFile("dune-project") {
                 return .default(icon: dune, description: "OCaml")
             }
-            if let make = findFile("Makefile") {
+            if let make = findFile("Makefile", "Makefile.am", "CMakeLists.txt") {
                 return .default(icon: make, description: "C")
-            }
-            if let make = findFile("Makefile.am") {
-                return .default(icon: make, description: "C")
-            }
-            if let cMake = findFile("CMakeLists.txt") {
-                return .default(icon: cMake, description: "C")
             }
             if let porn = findFile("pom.xml") {
                 return .default(icon: porn, description: "Java")
@@ -154,12 +148,12 @@ struct Project {
                 return .default(icon: index, description: "Static Website")
             }
 
-            if ["CNAME", ".nojekyll", "netlify.toml"].contains(where: { findFile($0) != nil }) {
+            if findFile("CNAME", ".nojekyll", "netlify.toml") != nil {
                 return .default(icon: url, description: "Static Website")
             }
 
             // MARK: recurse into promising directories
-            if let child = ["code", "client", "src", "app", "lib"].compactMap(findFile).first {
+            if let child = findFile("code", "client", "src", "app", "lib") {
                 return try infer(from: child)
             }
 
