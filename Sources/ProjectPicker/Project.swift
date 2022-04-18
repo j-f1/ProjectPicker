@@ -150,6 +150,13 @@ struct Project {
             if findFile("__pycache__") != nil {
                 return .default(icon: url, description: "Python")
             }
+            if let index = findFile("index.html") {
+                return .default(icon: index, description: "Static Website")
+            }
+
+            if ["CNAME", ".nojekyll", "netlify.toml"].contains(where: { findFile($0) != nil }) {
+                return .default(icon: url, description: "Static Website")
+            }
 
             // MARK: recurse into promising directories
             if let child = ["code", "client", "src", "app", "lib"].compactMap(findFile).first {
