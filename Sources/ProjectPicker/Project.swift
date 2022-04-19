@@ -40,9 +40,19 @@ struct Project {
         }
         let name = url.lastPathComponent
 
-        let acronym = name.words.reduce(into: "") { partialResult, word in
-            word.first.map { partialResult.append($0) }
-        }
+        let words = name.words
+        let matches = Set([
+            name,
+            words.joined(separator: " "),
+            words.count > 1 ? words.reduce(into: "") { partialResult, word in
+                word.first.map { partialResult.append($0) }
+            } : nil,
+            friendlyPath,
+            friendlyPath
+                .replacingOccurrences(of: "/", with: " ")
+                .replacingOccurrences(of: "-", with: " ")
+        ].compactMap { $0 })
+
         return .init(
             uid: url.absoluteString,
             title: name,
@@ -50,7 +60,7 @@ struct Project {
             arg: url.path,
             icon: .init(type: .fileIcon, path: kind.icon.path.removingPercentEncoding!),
             valid: true,
-            match: name.contains(" ") ? name : name + (name.words.count > 1 ? " | \(name.words.joined(separator: " ")) | \(acronym)" : ""),
+            match: matches.joined(separator: " | "),
             autocomplete: nil,
             type: .file(skipCheck: true),
             variables: [
