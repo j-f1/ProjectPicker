@@ -22,6 +22,16 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
+				<string>78A7E5F8-6D1A-4DCB-BA64-7AC0E1F7B499</string>
+				<key>modifiers</key>
+				<integer>1179648</integer>
+				<key>modifiersubtext</key>
+				<string>Open in {var:defaultEditorName}</string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
 				<string>1774038C-D19A-4923-8B6E-81DD5041B8D9</string>
 				<key>modifiers</key>
 				<integer>524288</integer>
@@ -84,6 +94,29 @@
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>38460AA6-F60B-4BD1-8790-76F9F4B6F7F9</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>open -a &quot;$defaultEditor&quot; &quot;$pathToOpen&quot;</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>5</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>78A7E5F8-6D1A-4DCB-BA64-7AC0E1F7B499</string>
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
@@ -201,14 +234,14 @@ open &quot;$(git remote get-url upstream || git remote get-url &quot;$(git remot
 			<key>xpos</key>
 			<integer>310</integer>
 			<key>ypos</key>
-			<integer>130</integer>
+			<integer>270</integer>
 		</dict>
 		<key>350C7B81-D1FF-488F-9E3E-D97CB8E2A1B8</key>
 		<dict>
 			<key>xpos</key>
-			<integer>55</integer>
+			<integer>45</integer>
 			<key>ypos</key>
-			<integer>130</integer>
+			<integer>270</integer>
 		</dict>
 		<key>38460AA6-F60B-4BD1-8790-76F9F4B6F7F9</key>
 		<dict>
@@ -217,25 +250,39 @@ open &quot;$(git remote get-url upstream || git remote get-url &quot;$(git remot
 			<key>ypos</key>
 			<integer>10</integer>
 		</dict>
+		<key>78A7E5F8-6D1A-4DCB-BA64-7AC0E1F7B499</key>
+		<dict>
+			<key>xpos</key>
+			<integer>310</integer>
+			<key>ypos</key>
+			<integer>140</integer>
+		</dict>
 		<key>9782E9C3-E345-42B0-8321-B6C373481E90</key>
 		<dict>
 			<key>xpos</key>
 			<integer>315</integer>
 			<key>ypos</key>
-			<integer>380</integer>
+			<integer>520</integer>
 		</dict>
 		<key>F4F4BE20-978F-4D68-891D-5434C2F244D8</key>
 		<dict>
 			<key>xpos</key>
 			<integer>310</integer>
 			<key>ypos</key>
-			<integer>250</integer>
+			<integer>390</integer>
 		</dict>
+	</dict>
+	<key>variables</key>
+	<dict>
+		<key>defaultEditor</key>
+		<string>Visual Studio Code - Insiders</string>
+		<key>defaultEditorName</key>
+		<string>VS Code</string>
 	</dict>
 	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
-	<string>1.2.1</string>
+	<string>1.2.2</string>
 	<key>webaddress</key>
 	<string>https://github.com/j-f1/ProjectPicker</string>
 </dict>
