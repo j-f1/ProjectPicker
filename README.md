@@ -42,3 +42,7 @@ With Xcode and the developer tools installed (`xcode-select --install`), run `./
 4. Notarize the resulting `Project Picker.alfredworkflow` file, and wait for it to finish.
 
 The script may need tweaking, especially in the code signing and notarization steps, for your exact developer setup.
+
+## Contributing
+
+I’d live to make this tool even more customizable. Feel free to open PRs adding options for new categories of editor, and support for other editors that don’t work with the current “open with” technique. I think it would also be neat to add support for customizing the terminal / file browser.
