@@ -90,7 +90,9 @@ struct Project {
         private static func QtCreator(icon: URL) -> Kind {
             Kind(icon: icon, appName: \.qtCreator, description: "Qt Creator", shouldOpenIcon: false)
         }
-
+        private static func Arduino(icon: URL) -> Kind {
+            Kind(icon: icon, appName: \.arduino, description: "Arduino", shouldOpenIcon: true)
+        }
 
         var appFriendlyName: String {
             if Config.shared.apps[keyPath: appName] == Config.shared.apps.vscode {
@@ -104,6 +106,8 @@ struct Project {
 
             let findByExtension = { (ext: String) in contents.first { $0.lastPathComponent.hasSuffix(ext) } }
             let findFile = { (names: String...) in contents.first { names.contains($0.lastPathComponent) } }
+
+            let dirName = url.lastPathComponent
 
             // MARK: IDE detection
             if let workspace = findByExtension(".code-workspace") {
@@ -120,6 +124,9 @@ struct Project {
             }
             if let project = findByExtension(".pro") {
                 return .QtCreator(icon: project)
+            }
+            if let ino = findFile("\(dirName).ino") {
+                return .Arduino(icon: ino)
             }
 
             // MARK: Icon inference for default editor

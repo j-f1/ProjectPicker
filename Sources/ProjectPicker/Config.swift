@@ -16,6 +16,7 @@ struct Config: Codable {
         var xcode: String = "Xcode"
         var vscode: String = "Visual Studio Code"
         var qtCreator: String = "Qt Creator"
+        var arduino: String = "Arduino IDE"
     }
 
     static let url = URL(
@@ -70,5 +71,6 @@ extension Config.AppNames {
         self.xcode = try container.decodeIfPresent(String.self, forKey: .xcode) ?? auto.xcode
         self.vscode = try container.decodeIfPresent(String.self, forKey: .vscode) ?? auto.vscode
         self.qtCreator = try container.decodeIfPresent(String.self, forKey: .qtCreator) ?? auto.qtCreator
+        self.arduino = try container.decodeIfPresent(String.self, forKey: .arduino) ?? auto.arduino
     }
 }
