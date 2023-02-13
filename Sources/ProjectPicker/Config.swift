@@ -13,9 +13,9 @@ struct Config: Codable {
 
     struct AppNames: Codable {
         let `default`: String
-        let xcode: String
-        let vscode: String
-        let qtCreator: String
+        var xcode: String = "Xcode"
+        var vscode: String = "Visual Studio Code"
+        var qtCreator: String = "Qt Creator"
     }
 
     static let url = URL(
@@ -59,5 +59,16 @@ private func debugContext(_ ctx: DecodingError.Context) {
     if let underlying = ctx.underlyingError as NSError?,
        let debugDescription = underlying.userInfo["NSDebugDescription"] {
         print(debugDescription)
+    }
+}
+
+extension Config.AppNames {
+    init(from decoder: Decoder) throws {
+        let container: KeyedDecodingContainer<Config.AppNames.CodingKeys> = try decoder.container(keyedBy: Config.AppNames.CodingKeys.self)
+        let auto = Config.AppNames(default: "")
+        self.default = try container.decode(String.self, forKey: .default)
+        self.xcode = try container.decodeIfPresent(String.self, forKey: .xcode) ?? auto.xcode
+        self.vscode = try container.decodeIfPresent(String.self, forKey: .vscode) ?? auto.vscode
+        self.qtCreator = try container.decodeIfPresent(String.self, forKey: .qtCreator) ?? auto.qtCreator
     }
 }
