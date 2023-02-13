@@ -137,7 +137,7 @@ struct Project {
             if let package = findFile("package.json") {
                 return .default(icon: package, description: "Node.js")
             }
-            if let requirements = findFile("requirements.txt") {
+            if let requirements = findFile("requirements.txt", "setup.py") {
                 return .default(icon: requirements, description: "Python")
             }
             if let dune = findFile("dune-project") {
@@ -164,13 +164,28 @@ struct Project {
             if let index = findFile("index.html") {
                 return .default(icon: index, description: "Static Website")
             }
+            if let ino = findByExtension("ino") {
+                return .default(icon: ino, description: "Arduino (Invalid)")
+            }
+            if let dns = findFile("dnsconfig.js") {
+                return .default(icon: dns, description: "DNSControl")
+            }
+            if let deno = findFile("deno.json") {
+                return .default(icon: deno, description: "Deno")
+            }
+            if let cargo = findFile("Cargo.toml") {
+                return .default(icon: cargo, description: "Rust")
+            }
+            if let config = findFile("config.toml") {
+                return .default(icon: config, description: "Hugo")
+            }
 
             if findFile("CNAME", ".nojekyll", "netlify.toml") != nil {
                 return .default(icon: url, description: "Static Website")
             }
 
             // MARK: recurse into promising directories
-            if let child = findFile("code", "client", "src", "app", "lib") {
+            if let child = findFile("code", "client", "src", "app", "lib", "Source") {
                 return try infer(from: child)
             }
 
