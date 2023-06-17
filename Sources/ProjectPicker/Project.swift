@@ -134,6 +134,10 @@ struct Project {
                 return .default(icon: racket, description: "Racket")
             }
 
+            if let tex = findFile("main.tex") {
+                return .default(icon: tex, description: "LaTeX")
+            }
+
             if let package = findFile("package.json") {
                 return .default(icon: package, description: "Node.js")
             }
