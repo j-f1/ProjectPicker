@@ -113,11 +113,11 @@ struct Project {
             if let workspace = findByExtension(".code-workspace") {
                 return .VSCode(workspace: workspace)
             }
-            if let package = findByExtension("Package.swift") {
-                return .Xcode(icon: package, description: "Swift")
-            }
             if let workspace = findByExtension(".xcworkspace") {
                 return .Xcode(icon: workspace, description: "Xcode (workspace)")
+            }
+            if let package = findByExtension("Package.swift") {
+                return .Xcode(icon: package, description: "Swift")
             }
             if let project = findByExtension(".xcodeproj") {
                 return .Xcode(icon: project, description: "Xcode")
