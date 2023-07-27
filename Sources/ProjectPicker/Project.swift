@@ -147,7 +147,7 @@ struct Project {
             if let dune = findFile("dune-project") {
                 return .default(icon: dune, description: "OCaml")
             }
-            if let make = findFile("Makefile", "Makefile.am", "CMakeLists.txt") {
+            if let make = findFile("Makefile", "makefile", "Makefile.am", "CMakeLists.txt") {
                 return .default(icon: make, description: "C")
             }
             if let porn = findFile("pom.xml") {
